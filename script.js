@@ -43,3 +43,31 @@ window.addEventListener('scroll', () => {
     navbar.style.boxShadow = 'none';
   }
 });
+
+// CTA 区：文案逐行淡入（滚动到可见时按顺序显示）
+const ctaLines = document.querySelectorAll(
+  '.cta-line, .cta h2, .cta .cta-sub, .cta-btn'
+);
+const ctaObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      ctaLines.forEach((el, i) => {
+        setTimeout(() => el.classList.add('show'), i * 550);
+      });
+      ctaObserver.disconnect(); // 只触发一次
+    }
+  });
+}, { threshold: 0.15 });
+
+const ctaSection = document.querySelector('.cta');
+if (ctaSection) ctaObserver.observe(ctaSection);
+
+// 视频加载失败时隐藏（本地还没放视频时，避免显示裂图）
+document.querySelectorAll('video').forEach((v) => {
+  v.addEventListener('error', () => {
+    const src = v.querySelector('source');
+    if (src) v.style.display = 'none';
+  });
+  // 如果 source 为空或加载失败，也隐藏
+  v.addEventListener('stalled', () => {});
+});
