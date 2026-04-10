@@ -1,0 +1,378 @@
+/* ========== 基础重置 ========== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #fff8f0;
+  color: #3a2415;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+/* 全局中文排版：避免孤字换行、避免标点顶头 */
+h1, h2, h3 { text-wrap: balance; word-break: keep-all; line-break: strict; }
+p, li     { text-wrap: pretty;  word-break: keep-all; line-break: strict; }
+a { text-decoration: none; color: inherit; }
+h1, h2, h3 { font-weight: 700; letter-spacing: 0.5px; }
+
+/* ========== 顶部导航 ========== */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 60px;
+  background: rgba(255, 248, 240, 0.85);
+  backdrop-filter: blur(10px);
+  z-index: 100;
+  border-bottom: 1px solid rgba(255, 140, 0, 0.15);
+}
+.logo { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 800; }
+.logo-circle {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ffb347, #ff7a00);
+  box-shadow: 0 4px 12px rgba(255,122,0,0.4);
+}
+.logo-text { color: #ff6a00; }
+.logo-text span { color: #3a2415; font-weight: 500; }
+.navbar nav a {
+  margin-left: 32px; font-size: 15px; font-weight: 500;
+  position: relative; transition: color 0.3s;
+}
+.navbar nav a:hover { color: #ff6a00; }
+.navbar nav a::after {
+  content: ''; position: absolute; left: 0; bottom: -6px;
+  width: 0; height: 2px; background: #ff6a00; transition: width 0.3s;
+}
+.navbar nav a:hover::after { width: 100%; }
+
+/* ========== Hero 区 ========== */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 120px 80px 60px;
+  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+  position: relative; overflow: hidden;
+}
+.hero-text { max-width: 620px; z-index: 2; }
+.hero-tag {
+  display: inline-block; padding: 6px 16px;
+  background: rgba(255,122,0,0.12); color: #ff6a00;
+  border-radius: 20px; font-size: 13px; font-weight: 600;
+  margin-bottom: 24px;
+}
+.hero-text h1 {
+  font-size: 54px; line-height: 1.3; margin-bottom: 24px;
+  color: #2a1a0a;
+  text-wrap: balance;           /* 自动均衡分行，避免孤字 */
+  word-break: keep-all;         /* 防止标点被挤到行首 */
+  line-break: strict;
+}
+.hero-sub {
+  font-size: 17px; color: #6b4a30; margin-bottom: 36px;
+  text-wrap: pretty;            /* 正文避免单字成行 */
+  word-break: keep-all;
+  line-break: strict;
+}
+.hero-btn {
+  display: inline-block; padding: 16px 36px;
+  background: linear-gradient(135deg, #ff8c00, #ff5e00);
+  color: #fff; border-radius: 50px; font-weight: 600;
+  box-shadow: 0 10px 24px rgba(255,94,0,0.35);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.hero-btn:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(255,94,0,0.45); }
+
+/* Hero 插画 */
+.hero-art { position: relative; width: 480px; height: 480px; }
+.orange {
+  position: absolute; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffb347, #ff7a00 60%, #d94e00 100%);
+  box-shadow: inset -20px -25px 50px rgba(140,40,0,0.4),
+              0 30px 60px rgba(255,100,0,0.3);
+}
+.orange.big {
+  width: 360px; height: 360px; top: 60px; left: 60px;
+  animation: float 6s ease-in-out infinite;
+}
+.orange.small.one {
+  width: 110px; height: 110px; top: 30px; right: 0;
+  animation: float 5s ease-in-out infinite 1s;
+}
+.orange.small.two {
+  width: 80px; height: 80px; bottom: 40px; left: 0;
+  animation: float 7s ease-in-out infinite 0.5s;
+}
+.leaf {
+  position: absolute; top: -20px; left: 130px;
+  width: 80px; height: 40px;
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
+  border-radius: 0 100% 0 100%;
+  transform: rotate(-30deg);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.shine {
+  position: absolute; top: 50px; left: 70px;
+  width: 80px; height: 50px; border-radius: 50%;
+  background: rgba(255,255,255,0.35);
+  filter: blur(8px);
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+/* ========== 卡片区 ========== */
+.card-section { padding: 100px 80px; background: #fff8f0; }
+.section-head { text-align: center; margin-bottom: 60px; }
+.num {
+  display: inline-block; font-size: 14px; color: #ff6a00;
+  font-weight: 700; letter-spacing: 3px; margin-bottom: 12px;
+}
+.section-head h2 { font-size: 40px; margin-bottom: 12px; color: #2a1a0a; }
+.section-head p { color: #7a5a40; font-size: 16px; max-width: 600px; margin: 0 auto; }
+
+.cards {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;
+  max-width: 1100px; margin: 0 auto;
+}
+.card {
+  background: #fff; padding: 40px 30px; border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(255,122,0,0.08);
+  border: 1px solid rgba(255,122,0,0.1);
+  transition: transform 0.4s, box-shadow 0.4s;
+}
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(255,122,0,0.18);
+}
+.card .emoji { font-size: 56px; margin-bottom: 16px; }
+.card h3 { font-size: 22px; margin-bottom: 12px; color: #ff6a00; }
+.card p { color: #6b4a30; font-size: 15px; }
+
+/* ========== 分栏区 ========== */
+.split-section {
+  display: flex; align-items: center; gap: 80px;
+  padding: 100px 80px;
+  background: linear-gradient(180deg, #fff3e0, #fff8f0);
+}
+.split-section.reverse { flex-direction: row-reverse; background: #fff8f0; }
+.split-text { flex: 1; }
+.split-text h2 { font-size: 40px; margin: 12px 0 20px; color: #2a1a0a; }
+.split-text p { font-size: 17px; color: #6b4a30; margin-bottom: 24px; }
+.split-text ul { list-style: none; }
+.split-text ul li {
+  padding: 10px 0; font-size: 16px;
+  border-bottom: 1px dashed rgba(255,122,0,0.2);
+}
+.split-art {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  min-height: 420px;
+}
+
+/* 香水瓶 */
+.bottle {
+  position: relative; width: 180px; height: 320px;
+  display: flex; flex-direction: column; align-items: center;
+}
+.bottle .cap {
+  width: 70px; height: 50px;
+  background: linear-gradient(135deg, #6b4a30, #3a2415);
+  border-radius: 8px 8px 4px 4px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+.bottle .neck {
+  width: 40px; height: 30px;
+  background: linear-gradient(180deg, #ffd699, #ffb347);
+}
+.bottle .body {
+  width: 180px; height: 240px;
+  background: linear-gradient(135deg, rgba(255,179,71,0.85), rgba(255,122,0,0.7));
+  border-radius: 20px 20px 30px 30px;
+  box-shadow: inset -15px -20px 40px rgba(140,40,0,0.3),
+              0 25px 50px rgba(255,100,0,0.4);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700; font-size: 14px;
+  text-align: center; letter-spacing: 2px;
+  position: relative;
+}
+.bottle .body::before {
+  content: ''; position: absolute;
+  top: 15px; left: 20px; width: 30px; height: 80px;
+  background: rgba(255,255,255,0.35); border-radius: 50%;
+  filter: blur(6px);
+}
+
+/* 橙汁杯 */
+.cup {
+  position: relative; width: 200px; height: 280px;
+}
+.cup::before {
+  content: ''; position: absolute;
+  bottom: 0; left: 10px; right: 10px; top: 30px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+  border: 3px solid rgba(255,255,255,0.6);
+  border-radius: 10px 10px 30px 30px;
+  box-shadow: 0 20px 40px rgba(255,100,0,0.3);
+}
+.juice {
+  position: absolute; bottom: 8px; left: 18px; right: 18px;
+  height: 200px;
+  background: linear-gradient(180deg, #ffa726, #ff6f00);
+  border-radius: 4px 4px 25px 25px;
+  box-shadow: inset 0 -10px 20px rgba(140,40,0,0.3);
+}
+.juice::before {
+  content: ''; position: absolute;
+  top: -5px; left: 0; right: 0; height: 14px;
+  background: radial-gradient(ellipse, #ffcc80 30%, #ffa726 70%);
+  border-radius: 50%;
+}
+.straw {
+  position: absolute; top: -10px; right: 50px;
+  width: 12px; height: 240px;
+  background: linear-gradient(90deg, #fff 50%, #ff6a00 50%);
+  background-size: 12px 20px;
+  border-radius: 6px;
+  transform: rotate(8deg);
+  z-index: 2;
+}
+.slice {
+  position: absolute; top: 20px; left: 20px;
+  width: 50px; height: 50px; border-radius: 50%;
+  background: radial-gradient(circle, #fff3e0 20%, #ffa726 30%, #ff6f00 70%);
+  border: 3px solid #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  z-index: 3;
+}
+
+.stats { display: flex; gap: 30px; margin-top: 30px; }
+.stats div { text-align: center; }
+.stats b {
+  display: block; font-size: 36px; color: #ff6a00; font-weight: 800;
+}
+.stats span { font-size: 13px; color: #7a5a40; }
+
+/* ========== 故事区 ========== */
+.story {
+  padding: 100px 80px; text-align: center;
+  background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+}
+.story h2 { font-size: 40px; margin-bottom: 50px; color: #2a1a0a; }
+.timeline {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+  max-width: 1100px; margin: 0 auto;
+}
+.t-item {
+  background: #fff; padding: 28px 20px; border-radius: 16px;
+  border-top: 4px solid #ff6a00;
+  box-shadow: 0 10px 25px rgba(255,122,0,0.1);
+  transition: transform 0.3s;
+}
+.t-item:hover { transform: translateY(-6px); }
+.t-item b { display: block; color: #ff6a00; margin-bottom: 8px; font-size: 16px; }
+.t-item p { font-size: 14px; color: #6b4a30; }
+
+/* ========== 底部诱导按钮 ========== */
+.cta {
+  padding: 120px 40px;
+  text-align: center;
+  background: radial-gradient(circle at center, #ffb347 0%, #ff6a00 70%);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.cta::before {
+  content: '🍊'; position: absolute;
+  font-size: 300px; opacity: 0.08;
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+}
+.cta h2 { font-size: 38px; margin-bottom: 16px; position: relative; }
+.cta p { font-size: 17px; margin-bottom: 40px; opacity: 0.95; position: relative; }
+.cta-btn {
+  position: relative;
+  padding: 20px 60px;
+  font-size: 18px; font-weight: 700;
+  color: #ff6a00;
+  background: #fff;
+  border: none; border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+  transition: all 0.3s;
+  animation: pulse 2s ease-in-out infinite;
+}
+.cta-btn:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 15px 35px rgba(0,0,0,0.25), 0 0 0 0 rgba(255,255,255,0.7); }
+  50% { box-shadow: 0 15px 35px rgba(0,0,0,0.25), 0 0 0 20px rgba(255,255,255,0); }
+}
+
+/* 隐藏的告白文字 */
+.secret-msg {
+  margin-top: 50px;
+  font-size: 64px;
+  font-weight: 900;
+  letter-spacing: 8px;
+  color: #fff;
+  text-shadow: 0 0 30px rgba(255,255,255,0.8),
+               0 0 60px rgba(255,200,100,1);
+  display: flex; justify-content: center; gap: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s;
+}
+.secret-msg span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(40px) scale(0.5);
+}
+.secret-msg.show { opacity: 1; }
+.secret-msg.show span {
+  animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+.secret-msg.show span:nth-child(1) { animation-delay: 0.0s; }
+.secret-msg.show span:nth-child(2) { animation-delay: 0.15s; }
+.secret-msg.show span:nth-child(3) { animation-delay: 0.30s; }
+.secret-msg.show span:nth-child(4) { animation-delay: 0.45s; }
+.secret-msg.show span:nth-child(5) { animation-delay: 0.60s; }
+.secret-msg.show span:nth-child(6) { animation-delay: 0.75s; }
+@keyframes popIn {
+  0% { opacity: 0; transform: translateY(40px) scale(0.5) rotate(-20deg); }
+  60% { opacity: 1; transform: translateY(-10px) scale(1.2) rotate(5deg); }
+  100% { opacity: 1; transform: translateY(0) scale(1) rotate(0); }
+}
+
+/* 漂浮的爱心 */
+.heart {
+  position: fixed;
+  font-size: 28px;
+  pointer-events: none;
+  animation: floatUp 3s ease-out forwards;
+  z-index: 999;
+}
+@keyframes floatUp {
+  0% { opacity: 1; transform: translateY(0) scale(0.5); }
+  100% { opacity: 0; transform: translateY(-300px) scale(1.5); }
+}
+
+/* ========== 底部 ========== */
+footer {
+  padding: 30px; text-align: center;
+  background: #2a1a0a; color: #ffb347; font-size: 14px;
+}
+
+/* ========== 响应式 ========== */
+@media (max-width: 900px) {
+  .navbar { padding: 15px 20px; }
+  .navbar nav a { margin-left: 16px; font-size: 13px; }
+  .hero { flex-direction: column; padding: 120px 24px 40px; text-align: center; }
+  .hero-text h1 { font-size: 36px; }
+  .hero-art { width: 300px; height: 300px; margin-top: 30px; }
+  .orange.big { width: 240px; height: 240px; top: 30px; left: 30px; }
+  .card-section, .split-section, .story { padding: 60px 24px; }
+  .cards, .timeline { grid-template-columns: 1fr; }
+  .split-section, .split-section.reverse { flex-direction: column; gap: 40px; }
+  .section-head h2, .split-text h2, .story h2, .cta h2 { font-size: 28px; }
+  .secret-msg { font-size: 36px; letter-spacing: 4px; }
+}
