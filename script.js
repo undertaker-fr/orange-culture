@@ -34,15 +34,36 @@ function createHeart() {
   setTimeout(() => heart.remove(), 3000);
 }
 
-// 滚动时导航栏阴影
+// 滚动时导航栏阴影（用 requestAnimationFrame 节流，避免每次 scroll 都触发样式重算）
 const navbar = document.querySelector('.navbar');
+let scrollTicking = false;
+let lastScrollState = false;
 window.addEventListener('scroll', () => {
-  if (window.scrollY > 30) {
-    navbar.style.boxShadow = '0 4px 20px rgba(255,122,0,0.1)';
-  } else {
-    navbar.style.boxShadow = 'none';
-  }
-});
+  if (scrollTicking) return;
+  scrollTicking = true;
+  requestAnimationFrame(() => {
+    const shouldShow = window.scrollY > 30;
+    if (shouldShow !== lastScrollState) {
+      navbar.style.boxShadow = shouldShow
+        ? '0 4px 20px rgba(255,122,0,0.1)'
+        : 'none';
+      lastScrollState = shouldShow;
+    }
+    scrollTicking = false;
+  });
+}, { passive: true });
+
+// 移动端：彻底不加载 hero 背景视频（连解码都省）
+const isMobile = window.matchMedia('(max-width: 900px), (hover: none)').matches;
+if (isMobile) {
+  document.querySelectorAll('.hero-bg-video').forEach((v) => {
+    v.pause();
+    v.removeAttribute('autoplay');
+    v.querySelectorAll('source').forEach((s) => s.remove());
+    v.load();
+    v.remove();   // 直接从 DOM 删掉
+  });
+}
 
 // CTA 区：文案逐行淡入（滚动到可见时按顺序显示）
 const ctaLines = document.querySelectorAll(

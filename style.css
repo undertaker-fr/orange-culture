@@ -437,3 +437,68 @@ footer {
   .cta-line.reveal-line { font-size: 28px; }
   .cta-line.reveal-line em { font-size: 38px; }
 }
+
+/* ============================================================
+   移动端 / 触屏设备性能优化
+   关掉所有 GPU 杀手：模糊、视频、持续动画、复杂阴影
+   ============================================================ */
+@media (max-width: 900px), (hover: none) {
+  /* 1. 关掉 backdrop-filter（移动 GPU 处理模糊极慢） */
+  .navbar {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(255, 248, 240, 0.96);   /* 改用半透明实色背景 */
+  }
+
+  /* 2. 隐藏 hero 背景视频（移动端别播视频，又卡又费电） */
+  .hero-bg-video { display: none !important; }
+
+  /* 3. 关掉所有 filter: blur()（实时模糊在手机上是性能黑洞） */
+  .photo-frame-glow { display: none; }
+  .hero-overlay { background: linear-gradient(135deg, #fff3e0, #ffe0b2); }
+
+  /* 4. 简化 box-shadow（去掉多层、缩小模糊半径） */
+  .hero-photo {
+    box-shadow: 0 12px 30px rgba(255,100,0,0.3);
+    border-width: 4px;
+  }
+  .card { box-shadow: 0 6px 16px rgba(255,122,0,0.12); }
+  .split-photo, .split-photo.tall { box-shadow: 0 12px 28px rgba(255,100,0,0.2); }
+  .video-frame { box-shadow: 0 12px 30px rgba(255,100,0,0.2); }
+  .t-item { box-shadow: 0 4px 12px rgba(255,122,0,0.1); }
+
+  /* 5. 关掉 hero 浮动动画（持续 transform 触发不停 layer 计算） */
+  .hero-photo { animation: none; }
+
+  /* 6. 简化 CTA 按钮的 pulse 动画（box-shadow 动画是大重绘） */
+  .cta-btn {
+    animation: none;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  }
+
+  /* 7. 关闭所有 hover 效果（触屏没有 hover，还会卡 100ms） */
+  .card:hover,
+  .split-photo:hover,
+  .t-item:hover,
+  .hero-btn:hover,
+  .cta-btn:hover {
+    transform: none;
+    box-shadow: 0 6px 16px rgba(255,122,0,0.12);
+  }
+  .card:hover .card-img { transform: none; }
+
+  /* 8. 关掉 .cta::before 那个 480px 巨型 emoji（占用纹理内存） */
+  .cta::before { display: none; }
+
+  /* 9. 简化导航栏滚动阴影（避免每次 scroll 触发样式重算） */
+  .navbar { box-shadow: 0 2px 8px rgba(255,122,0,0.08); }
+}
+
+/* 用户开启了"减少动效"系统设置时，全部动画关掉 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
