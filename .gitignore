@@ -1,0 +1,18 @@
+# 原图备份（很大，仅本地保留以便重新压缩）
+images-original/
+
+# 操作系统垃圾文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 编辑器临时文件
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Python 缓存
+__pycache__/
+*.pyc
