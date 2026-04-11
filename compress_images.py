@@ -1,7 +1,12 @@
 """
 橙子文化网站 - 图片批量压缩脚本
 用法：python compress_images.py
-会自动把 images/ 里的图片压缩到合理大小，原图备份到 images-original/
+
+工作流程：
+  - images-original/  ← 原图（你只需要维护这里）
+  - images/           ← 压缩后的输出（脚本自动生成，会被网页引用）
+
+每次想替换/新增图片，就把图片放到 images-original/ 里，重跑本脚本即可。
 """
 from PIL import Image
 from pathlib import Path
@@ -18,22 +23,30 @@ ROOT = Path(__file__).parent
 SRC = ROOT / "images"
 BACKUP = ROOT / "images-original"
 
-if not SRC.exists():
-    print(f"[ERROR] 找不到 {SRC}")
-    sys.exit(1)
+exts = {".jpg", ".jpeg", ".png", ".webp"}
 
-# 1. 备份原图（只在第一次跑时备份，不会覆盖已有备份）
+# 1. 如果没有 images-original/，首次跑时把 images/ 备份过去
 if not BACKUP.exists():
-    print(f"[BACKUP] 首次运行，正在备份原图到 {BACKUP.name}/ ...")
+    if not SRC.exists():
+        print(f"[ERROR] 找不到 {SRC} 也找不到 {BACKUP}")
+        sys.exit(1)
+    print(f"[BACKUP] 首次运行，正在备份 images/ → {BACKUP.name}/ ...")
     shutil.copytree(SRC, BACKUP)
     print(f"[BACKUP] 备份完成\n")
-else:
-    print(f"[BACKUP] 已存在 {BACKUP.name}/，跳过备份\n")
-    print(f"[提示] 如果想重新压缩原图，请先删掉 images/ 里的文件，")
-    print(f"       再从 {BACKUP.name}/ 复制回 images/ 重跑本脚本\n")
 
-# 2. 遍历压缩
-exts = {".jpg", ".jpeg", ".png", ".webp"}
+# 2. 始终以 images-original/ 为源，复制到 images/，再压缩
+SRC.mkdir(exist_ok=True)
+src_files = [f for f in BACKUP.iterdir() if f.suffix.lower() in exts]
+
+if not src_files:
+    print(f"[WARN] {BACKUP} 里没有可处理的图片")
+    sys.exit(0)
+
+print(f"[SYNC] 从 {BACKUP.name}/ 复制 {len(src_files)} 张原图到 {SRC.name}/ ...")
+for sf in src_files:
+    shutil.copy2(sf, SRC / sf.name)
+print(f"[SYNC] 复制完成\n")
+
 files = [f for f in SRC.iterdir() if f.suffix.lower() in exts]
 
 if not files:
