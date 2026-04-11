@@ -1,7 +1,12 @@
 """
 橙子文化网站 - 视频批量压缩脚本
 用法：python compress_videos.py
-会自动把 videos/ 里的 mp4 重新编码到合理大小，原图备份到 videos-original/
+
+工作流程：
+  - videos-original/  ← 原视频（你只需要维护这里）
+  - videos/           ← 压缩后的输出（脚本自动生成，会被网页引用）
+
+每次想替换视频，把新 mp4 放进 videos-original/ 覆盖同名文件，重跑本脚本即可。
 """
 import imageio_ffmpeg
 import subprocess
@@ -13,57 +18,53 @@ from pathlib import Path
 # CRF：恒定质量，越小质量越高文件越大
 #   18-23 高质量
 #   24-28 中等（网页背景视频甜蜜点）
-#   29-35 低质量（仅追求小文件）
+#   29-35 低质量(仅追求小文件)
 SETTINGS = {
     "hero.mp4":    {"width": 1280, "crf": 30, "preset": "medium"},
     "feature.mp4": {"width": 1280, "crf": 27, "preset": "medium"},
 }
+DEFAULT_OPTS = {"width": 1280, "crf": 28, "preset": "medium"}
 # ====================
 
 ROOT = Path(__file__).parent
 SRC = ROOT / "videos"
 BACKUP = ROOT / "videos-original"
 
-if not SRC.exists():
-    print(f"[ERROR] 找不到 {SRC}")
-    sys.exit(1)
-
 FFMPEG = imageio_ffmpeg.get_ffmpeg_exe()
 print(f"[INFO] 使用 ffmpeg: {FFMPEG}\n")
 
-# 1. 备份原视频
+# 1. 如果没有 videos-original/，首次跑时把 videos/ 备份过去
 if not BACKUP.exists():
-    print(f"[BACKUP] 首次运行，正在备份原视频到 {BACKUP.name}/ ...")
+    if not SRC.exists():
+        print(f"[ERROR] 找不到 {SRC} 也找不到 {BACKUP}")
+        sys.exit(1)
+    print(f"[BACKUP] 首次运行，正在备份 videos/ → {BACKUP.name}/ ...")
     shutil.copytree(SRC, BACKUP)
     print(f"[BACKUP] 备份完成\n")
-else:
-    print(f"[BACKUP] 已存在 {BACKUP.name}/，跳过备份\n")
 
-# 2. 遍历压缩
-videos = [f for f in SRC.iterdir() if f.suffix.lower() == ".mp4"]
+# 2. 始终以 videos-original/ 为源，遍历压缩输出到 videos/
+SRC.mkdir(exist_ok=True)
+videos = [f for f in BACKUP.iterdir() if f.suffix.lower() == ".mp4"]
 if not videos:
-    print("[WARN] videos/ 里没有 mp4 文件")
+    print(f"[WARN] {BACKUP} 里没有 mp4 文件")
     sys.exit(0)
 
 total_before = 0
 total_after = 0
 
-for f in videos:
-    src_backup = BACKUP / f.name
-    if not src_backup.exists():
-        print(f"[SKIP] {f.name} 没有备份，跳过")
-        continue
+for src_backup in videos:
+    f = SRC / src_backup.name  # 输出路径
 
     size_before = src_backup.stat().st_size
     total_before += size_before
 
-    opts = SETTINGS.get(f.name, {"width": 1280, "crf": 28, "preset": "medium"})
+    opts = SETTINGS.get(src_backup.name, DEFAULT_OPTS)
 
-    print(f"[ENCODE] {f.name}  ({size_before/1024/1024:.2f} MB)")
+    print(f"[ENCODE] {src_backup.name}  ({size_before/1024/1024:.2f} MB)")
     print(f"         参数: width={opts['width']}, crf={opts['crf']}, preset={opts['preset']}")
 
     # 输出到临时文件，编码成功后再覆盖
-    tmp_out = SRC / f"_tmp_{f.name}"
+    tmp_out = SRC / f"_tmp_{src_backup.name}"
 
     cmd = [
         FFMPEG, "-y", "-i", str(src_backup),
