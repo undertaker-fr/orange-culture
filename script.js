@@ -89,6 +89,29 @@ document.querySelectorAll('video').forEach((v) => {
     const src = v.querySelector('source');
     if (src) v.style.display = 'none';
   });
-  // 如果 source 为空或加载失败，也隐藏
-  v.addEventListener('stalled', () => {});
 });
+
+// 主视频懒加载：滚动到附近才注入 source 并播放，避免提前下载 2MB
+const featureVideo = document.getElementById('featureVideo');
+if (featureVideo) {
+  const videoObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        // 注入 source
+        if (!featureVideo.querySelector('source')) {
+          const source = document.createElement('source');
+          source.src = 'videos/feature.mp4';
+          source.type = 'video/mp4';
+          featureVideo.appendChild(source);
+          featureVideo.load();
+          // 加载完后开始播放
+          featureVideo.addEventListener('loadeddata', () => {
+            featureVideo.play().catch(() => {/* 自动播放被拦截就算了 */});
+          }, { once: true });
+        }
+        videoObserver.disconnect();   // 只触发一次
+      }
+    });
+  }, { rootMargin: '300px' });        // 距离视口 300px 时就开始加载
+  videoObserver.observe(featureVideo);
+}

@@ -32,9 +32,9 @@
 
     <div class="hero-text">
       <p class="hero-tag">A Tribute to the Sun-Kissed Fruit</p>
-      <h1>橙子，<br/>是被阳光亲吻过的果实。</h1>
-      <p class="hero-sub">从枝头的清晨到杯中的黄昏，
-        我们追寻每一颗橙子背后的香气、色彩与温度。</p>
+      <h1>阳光亲吻过的果实</h1>
+      <p class="hero-sub">从枝头的清晨到杯中的黄昏
+        我们追寻每一颗橙子背后的香气 色彩与温度</p>
       <a href="#tree" class="hero-btn">开启橙之旅 →</a>
     </div>
     <div class="hero-art">
@@ -136,8 +136,8 @@
       <p>用镜头凝住阳光，让一颗橙子在慢动作里绽放。</p>
     </div>
     <div class="video-frame">
-      <video autoplay muted loop playsinline poster="images/hero.jpg">
-        <source src="videos/feature.mp4" type="video/mp4" />
+      <video id="featureVideo" muted loop playsinline preload="none" poster="images/hero.jpg">
+        <!-- 视频源由 JS 在滚动到附近时才注入，避免提前下载 2MB -->
         您的浏览器不支持视频播放。
       </video>
     </div>
@@ -146,22 +146,22 @@
   <!-- 底部诱导按钮 -->
   <section class="cta">
     <div class="cta-inner">
-      <p class="cta-line">橙子，是世界上最受欢迎的水果之一。</p>
-      <p class="cta-line">而在所有橙子里，大家尤其偏爱——</p>
-      <p class="cta-line big-line">大橙子。</p>
-      <p class="cta-line">黄澄澄、圆滚滚、香喷喷，</p>
-      <p class="cta-line">一口咬下去，满嘴都是阳光的味道。</p>
-      <p class="cta-line">所以啊，人人都爱大橙子。</p>
+      <p class="cta-line">橙子 是世界上最受欢迎的水果之一</p>
+      <p class="cta-line">而在所有橙子里 大家尤其偏爱——</p>
+      <p class="cta-line big-line">大橙子</p>
+      <p class="cta-line">黄澄澄 圆滚滚 香喷喷</p>
+      <p class="cta-line">一口咬下去 满嘴都是阳光的味道</p>
+      <p class="cta-line">所以啊 人人都爱大橙子</p>
       <p class="cta-line pause">……</p>
-      <p class="cta-line">可是吃着吃着，我忽然发现一件奇怪的事——</p>
-      <p class="cta-line">我好像，不太是在想"大橙子"。</p>
-      <p class="cta-line reveal-line">我在想的，是大<em>"程"</em>子。</p>
-      <p class="cta-line small-line">（嗯？念错了吗？）</p>
-      <p class="cta-line small-line">（没念错。）</p>
-      <h2>这颗"橙"子，对我来说，比世界上所有橙子都甜。</h2>
-      <p class="cta-sub">想知道她是谁？ 🍊</p>
+      <p class="cta-line">可是吃着吃着 我忽然发现一件奇怪的事——</p>
+      <p class="cta-line">我好像 不太是在想"大橙子"</p>
+      <p class="cta-line reveal-line">我在想的 是大<em>"程"</em>子</p>
+      <p class="cta-line small-line">嗯 念错了吗</p>
+      <p class="cta-line small-line">没念错</p>
+      <h2>这颗"橙"子 比世界上所有橙子都甜</h2>
+      <p class="cta-sub">想知道她是谁 🍊</p>
       <button id="secretBtn" class="cta-btn">
-        <span>点这里，让这个秘密被阳光晒出来 ✨</span>
+        <span>点这里 让这个秘密被阳光晒出来 ✨</span>
       </button>
       <div id="secretMsg" class="secret-msg">
         <span>程</span><span>璇</span><span>我</span><span>爱</span><span>你</span><span>！</span>
